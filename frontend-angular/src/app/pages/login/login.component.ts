@@ -53,7 +53,6 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.loading = true;
       this.errorMessage = '';
-      
       const credentials: LoginUsuarioDto = {
         correo: this.loginForm.value.correo,
         contrasena: this.loginForm.value.contrasena
@@ -67,9 +66,11 @@ export class LoginComponent implements OnInit {
           
           if (currentUser && currentUser.rol === RolUsuario.ADMINISTRADOR) {
             this.router.navigate(['/dashboard']);
-          } else if (currentUser && currentUser.rol === RolUsuario.OPERADOR) {
+          } 
+          else if (currentUser && currentUser.rol === RolUsuario.OPERADOR) {
             this.router.navigate(['/operador-dashboard']);
-          } else {
+          } 
+          else {
             this.router.navigate(['/login']);
           }
         },
@@ -79,7 +80,9 @@ export class LoginComponent implements OnInit {
           console.error('Error en el login:', error);
           
           if (error.status === 401) {
-            this.errorMessage = 'Credenciales incorrectas, verifica otra vez tu correo y contraseña';
+            this.errorMessage = 'Acceso rechazado';
+          } else if (error.status === 400) {
+            this.errorMessage = 'Datos invalidos, revisa el correo y la contraseña';
           } else if (error.status === 0) {
             this.errorMessage = 'Error de conexion verificar el servidor';
           } else if (error.status === 500) {

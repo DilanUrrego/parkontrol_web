@@ -29,7 +29,7 @@ export class AuthService {
     async login(loginUsuarioDto: LoginUsuarioDto): Promise<LoginResponseDto> {
         const usuarioValido = await this.validarUsuario(loginUsuarioDto.correo, loginUsuarioDto.contrasena);
         if (!usuarioValido){
-            throw new UnauthorizedException('email o password invalidos');
+            throw new UnauthorizedException('Acceso rechazado');
         }
         const payload = {
             id: usuarioValido.id,

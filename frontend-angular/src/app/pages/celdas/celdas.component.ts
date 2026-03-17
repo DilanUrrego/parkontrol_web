@@ -142,7 +142,7 @@ export class CeldasComponent implements OnInit {
   private crearCelda(celdaData: any): void {
     this.celdasService.create(celdaData).subscribe({
       next: () => {
-        console.log('Celda creada exitosamente');
+        
         if (this.parqueaderoSeleccionado) {
           this.cargarCeldas(this.parqueaderoSeleccionado);
         }
