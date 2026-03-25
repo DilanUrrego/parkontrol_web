@@ -18,6 +18,10 @@ export class ParqueaderosService {
     async crear(createParqueaderoDto: CreateParqueaderoDto): Promise<ParqueaderoResponseDto> {
         const empresa = await this.empresasService.findEmpresaById(createParqueaderoDto.idEmpresa);
         
+        if (!empresa) {
+            throw new NotFoundException(`No existe empresa con id: ${createParqueaderoDto.idEmpresa}`);
+        }
+
         const parqueadero = this.parqueaderoRepository.create({
             nombre: createParqueaderoDto.nombre,
             capacidadTotal: createParqueaderoDto.capacidadTotal,
