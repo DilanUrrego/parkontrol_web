@@ -1,13 +1,11 @@
-import { Component, Input } from '@angular/core';
-import { FacturacionService } from '../../services/facturacion.service';
-import { AuthService } from '../../services/autenticacion.service';
-import { ClienteFactura } from '../../models/facturacion.model';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { ClienteFactura, CrearClienteFacturaDto } from '../../models/facturacion.model';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ClienteFacturaModalComponent } from '../modal-nuevo-cliente/modal-nuevo-cliente.component';
-import { CrearClienteFacturaDto } from '../../models/facturacion.model';
-import { Output, EventEmitter } from '@angular/core';
+
+
 
 @Component({
   selector: 'app-clientes-factura',
@@ -21,7 +19,7 @@ export class ClientesFacturaComponent {
   @Output() clienteCreado = new EventEmitter<CrearClienteFacturaDto>();
   displayedColumns = ['id', 'tipoDocumento', 'numeroDocumento', 'correo'];
 
-  constructor(private dialog: MatDialog) {}
+  constructor(readonly dialog: MatDialog) {}
 
   abrirModalNuevoCliente(): void {
     const dialogRef = this.dialog.open(ClienteFacturaModalComponent, {

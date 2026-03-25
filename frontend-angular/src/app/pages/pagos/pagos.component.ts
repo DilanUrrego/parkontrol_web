@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { PagosService } from '../../services/pagos.service';
 import { ParqueaderosService } from '../../services/parqueaderos.service';
@@ -10,15 +10,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FiltroParqueaderosComponent } from '../../components/filtro-parqueaderos/filtro-parqueaderos.component';
 import { PagoModalComponent, PagoDialogData } from '../../components/pago-modal/pago-modal.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { FacturaPagoModalComponent } from '../../components/factura-pago-modal/factura-pago-modal.component';
 import { FacturacionService } from '../../services/facturacion.service';
 import { FacturaElectronica } from '../../models/facturacion.model';
-
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pagos',
@@ -37,7 +36,7 @@ import { FacturaElectronica } from '../../models/facturacion.model';
   templateUrl: './pagos.component.html',
   styleUrls: ['./pagos.component.scss']
 })
-export class PagosComponent implements OnInit {
+export class PagosComponent implements OnInit, OnDestroy {
   pagos: Pago[] = [];
   parqueaderos: Parqueadero[] = [];
   loading = false;
@@ -45,28 +44,61 @@ export class PagosComponent implements OnInit {
   errorMessage = '';
   mensajeExito: string = '';
   displayedColumns: string[] = ['id', 'idReserva', 'monto', 'fechaPago', 'idMetodoPago', 'acciones'];
+  
+  readonly subscriptions: Subscription[] = [];
 
   constructor(
-    private pagosService: PagosService,
-    private parqueaderosService: ParqueaderosService,
-    private authService: AuthService,
-    private dialog: MatDialog,
-    private facturasService: FacturacionService,
-
+    private readonly pagosService: PagosService,
+    private readonly parqueaderosService: ParqueaderosService,
+    private readonly authService: AuthService,
+    private readonly dialog: MatDialog,
+    private readonly facturasService: FacturacionService
   ) {}
 
   ngOnInit(): void {
     this.cargarParqueaderos();
   }
 
+  ngOnDestroy(): void {
+    // Limpiar todas las suscripciones para evitar memory leaks
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  // Método genérico para manejar mensajes de éxito
+  private mostrarMensajeExito(mensaje: string, duration: number = 3000): void {
+    this.mensajeExito = mensaje;
+    setTimeout(() => {
+      this.mensajeExito = '';
+    }, duration);
+  }
+
+  // Método genérico para manejar mensajes de error
+  private mostrarMensajeError(mensaje: string, duration: number = 4000): void {
+    this.errorMessage = mensaje;
+    setTimeout(() => {
+      this.errorMessage = '';
+    }, duration);
+  }
+
+  // Método genérico para manejar operaciones con loading
+  private ejecutarConLoading<T>(
+    operacion: () => void,
+    callback: () => void
+  ): void {
+    this.loading = true;
+    operacion();
+    callback();
+  }
+
   private cargarParqueaderos(): void {
     const usuario = this.authService.getUsuarioActual();
-    if (!usuario || !usuario.idEmpresa) {
+    if (!usuario?.idEmpresa) {
       console.error('No hay usuario autenticado');
       return;
     }
+
     this.loading = true;
-    this.parqueaderosService.getByEmpresa(usuario.idEmpresa).subscribe({
+    const sub = this.parqueaderosService.getByEmpresa(usuario.idEmpresa).subscribe({
       next: (parqueaderos) => {
         this.parqueaderos = parqueaderos;
         if (parqueaderos.length > 0) {
@@ -79,13 +111,15 @@ export class PagosComponent implements OnInit {
       error: (error) => {
         console.error('Error No cargo parqueaderos', error);
         this.loading = false;
+        this.mostrarMensajeError('Error al cargar los parqueaderos');
       }
     });
+    this.subscriptions.push(sub);
   }
 
   private cargarPagos(idParqueadero: number): void {
     this.loading = true;
-    this.pagosService.getByParqueadero(idParqueadero).subscribe({
+    const sub = this.pagosService.getByParqueadero(idParqueadero).subscribe({
       next: (pagos) => {
         this.pagos = pagos;
         this.loading = false;
@@ -94,8 +128,10 @@ export class PagosComponent implements OnInit {
         console.error('No se cargaron los pagos', error);
         this.pagos = [];
         this.loading = false;
+        this.mostrarMensajeError('Error al cargar los pagos');
       }
     });
+    this.subscriptions.push(sub);
   }
 
   onParqueaderoCambia(idParqueadero: number): void {
@@ -105,14 +141,17 @@ export class PagosComponent implements OnInit {
 
   abrirModalCrear(): void {
     if (!this.parqueaderoSeleccionado) return;
+
     const dialogData: PagoDialogData = {
       idParqueadero: this.parqueaderoSeleccionado
     };
+
     const dialogRef = this.dialog.open(PagoModalComponent, {
       width: '500px',
       data: dialogData,
       disableClose: true
     });
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.crearPago(result);
@@ -121,25 +160,20 @@ export class PagosComponent implements OnInit {
   }
 
   private crearPago(pagoData: any): void {
-    this.pagosService.create(pagoData).subscribe({
+    const sub = this.pagosService.create(pagoData).subscribe({
       next: (pago: any) => {
-
         console.log('Pago creado:', pago);
-        this.mensajeExito = 'Pago procesado exitosamente, monto: $' + pago.monto;
-
+        this.mostrarMensajeExito(`Pago procesado exitosamente, monto: $${pago.monto}`);
         setTimeout(() => {
-          this.mensajeExito = '';
           this.cargarPagos(this.parqueaderoSeleccionado!);
         }, 3000);
       },
       error: (error: any) => {
         console.error('Error al crear pago:', error);
-        this.errorMessage = 'Error al crear el pago.';
-        setTimeout(() => {
-          this.errorMessage = '';
-        }, 4000);
+        this.mostrarMensajeError('Error al crear el pago.');
       }
     });
+    this.subscriptions.push(sub);
   }
 
   verFactura(pago: Pago): void {
@@ -148,7 +182,7 @@ export class PagosComponent implements OnInit {
   }
 
   abrirFactura(pagoId: number): void {
-    this.facturasService.getFacturaPorPago(pagoId).subscribe({
+    const sub = this.facturasService.getFacturaPorPago(pagoId).subscribe({
       next: (factura: FacturaElectronica) => {
         console.log('Factura obtenida:', factura);
         this.dialog.open(FacturaPagoModalComponent, {
@@ -163,5 +197,6 @@ export class PagosComponent implements OnInit {
         });
       }
     });
+    this.subscriptions.push(sub);
   }
 }

@@ -28,8 +28,8 @@ export class FacturaModalComponent {
 	facturaForm: any;
 
 	constructor(
-		private fb: FormBuilder,
-		private dialogRef: MatDialogRef<FacturaModalComponent>,
+		readonly fb: FormBuilder,
+		readonly dialogRef: MatDialogRef<FacturaModalComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: { idEmpresa?: number; clientes?: any[] }
 	) {
 			this.facturaForm = this.fb.group({

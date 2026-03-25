@@ -1,14 +1,11 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CrearClienteFacturaDto } from '../../models/facturacion.model';
-
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-cliente-factura-modal',
@@ -22,7 +19,7 @@ export class ClienteFacturaModalComponent {
   loading = false;
 
   constructor(
-    private formBuilder: FormBuilder,
+    readonly formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<ClienteFacturaModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {

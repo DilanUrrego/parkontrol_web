@@ -2,7 +2,6 @@ import { Component} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { VehiculosService } from '../../services/vehiculos.service';
 import { Vehiculo, CrearVehiculoDto } from '../../models/vehiculo.model';
-import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -39,8 +38,8 @@ export class VehiculosComponent  {
   displayedColumns: string[] = ['id', 'placa', 'tipoVehiculo'];
 
   constructor(
-    private formBuilder: FormBuilder,
-    private vehiculosService: VehiculosService
+    readonly formBuilder: FormBuilder,
+    readonly vehiculosService: VehiculosService
   ) {
     this.searchForm = this.formBuilder.group({
       placa: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]]

@@ -38,8 +38,8 @@ export class CeldaModalComponent {
   ];
 
   constructor(
-    private fb: FormBuilder,
-    private dialogRef: MatDialogRef<CeldaModalComponent>,
+    readonly fb: FormBuilder,
+    readonly dialogRef: MatDialogRef<CeldaModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: CeldaDialogData
   ) {
     this.celdaForm = this.fb.group({

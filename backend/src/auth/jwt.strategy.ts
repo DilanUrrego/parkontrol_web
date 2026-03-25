@@ -8,7 +8,7 @@ import type { JwtPayload, JwtUsuario } from "./interfaces";
 export class JwtStrategy extends PassportStrategy(Strategy){
 
     constructor (
-        private configService: ConfigService,
+        readonly configService: ConfigService,
     ){
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

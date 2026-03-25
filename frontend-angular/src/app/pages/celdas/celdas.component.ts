@@ -17,11 +17,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
 import { EstadoCelda } from '../../models/shared.model';
 import { FiltroParqueaderosComponent } from '../../components/filtro-parqueaderos/filtro-parqueaderos.component';
-import { Usuario } from '../../models/usuario.model';
-
-
-
-
 
 @Component({
   selector: 'app-celdas',
@@ -59,10 +54,10 @@ export class CeldasComponent implements OnInit {
   displayedColumns: string[] = ['id', 'estado', 'tipoCelda', 'sensor', 'acciones'];
 
   constructor(
-    private celdasService: CeldasService,
-    private parqueaderosService: ParqueaderosService,
-    private authService: AuthService,
-    private dialog: MatDialog
+    readonly celdasService: CeldasService,
+    readonly parqueaderosService: ParqueaderosService,
+    readonly authService: AuthService,
+    readonly dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -71,7 +66,7 @@ export class CeldasComponent implements OnInit {
 
   private cargarParqueaderos(): void {
     const usuario = this.authService.getUsuarioActual();
-    if (!usuario || !usuario.idEmpresa) {
+    if (!usuario?.idEmpresa) {
       console.error('No hay usuario autenticado');
       return;
     }
@@ -108,7 +103,7 @@ export class CeldasComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error no cargaronlas celdas', error);
+        console.error('Error no cargaron las celdas', error);
         this.celdas = [];
         this.celdasFiltradas = [];
         this.loading = false;
@@ -183,6 +178,4 @@ export class CeldasComponent implements OnInit {
       }
     });
   }
-
-
 }

@@ -2,10 +2,6 @@ import { Body, Controller, Get, Param, ParseIntPipe, Post, NotFoundException } f
 import { VehiculosService } from './vehiculos.service';
 import { CreateVehiculoDto } from './entities/dto/crear-vehiculo.dto';
 import { Vehiculo } from './entities/vehiculo.entity';
-// import { Roles } from 'src/shared/decorators'; // REMOVED FOR BackendSinAuth
-// import { RoleEnum } from 'src/shared/entities/rol.entity'; // REMOVED FOR BackendSinAuth
-// import { JwtAuthGuard } from 'src/auth/guards'; // REMOVED FOR BackendSinAuth
-// import { RolesGuard } from 'src/shared/guards'; // REMOVED FOR BackendSinAuth
 
 @Controller('vehicles')
 export class VehiculosController {

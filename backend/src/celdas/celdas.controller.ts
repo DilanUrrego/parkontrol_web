@@ -2,12 +2,6 @@ import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs
 import { CeldasService } from './celdas.service';
 import { CreateCeldaDto } from './entities/dto/crear-celda.dto';
 import { Celda } from './entities/celda.entity';
-// import { Roles } from 'src/shared/decorators'; // REMOVED FOR BackendSinAuth
-// import { RoleEnum } from 'src/shared/entities/rol.entity'; // REMOVED FOR BackendSinAuth
-// import { JwtAuthGuard } from 'src/auth/guards'; // REMOVED FOR BackendSinAuth
-// import { RolesGuard } from 'src/shared/guards'; // REMOVED FOR BackendSinAuth
-// import { GetUser } from 'src/shared/decorators'; // REMOVED FOR BackendSinAuth
-// import type { JwtUsuario } from 'src/auth/interfaces'; // REMOVED FOR BackendSinAuth
 import { ParqueaderosService } from 'src/parqueaderos/parqueaderos.service';
 
 @Controller('cells')

@@ -8,7 +8,7 @@ export class VistasController {
 
   @Get('ocupacion')
   async getOcupacionParqueaderos(@Query('idEmpresa') idEmpresa?: string) {
-    const idEmpresaNum = idEmpresa ? parseInt(idEmpresa, 10) : null;
+    const idEmpresaNum = idEmpresa ? Number.parseInt(idEmpresa, 10) : null;
     return await this.vistasService.getOcupacionByEmpresa(idEmpresaNum);
   }
 
@@ -29,7 +29,7 @@ export class VistasController {
 
   @Get('historial-reservas')
   async getHistorialReservas(@Query('idEmpresa') idEmpresa?: string) {
-    const idEmpresaNum = idEmpresa ? parseInt(idEmpresa, 10) : null;
+    const idEmpresaNum = idEmpresa ? Number.parseInt(idEmpresa, 10) : null;
     return await this.vistasService.getHistorialByEmpresa(idEmpresaNum);
   }
 
@@ -53,7 +53,7 @@ export class VistasController {
 
   @Get('facturacion')
   async getFacturacionCompleta(@Query('idEmpresa') idEmpresa?: string) {
-    const idEmpresaNum = idEmpresa ? parseInt(idEmpresa, 10) : null;
+    const idEmpresaNum = idEmpresa ? Number.parseInt(idEmpresa, 10) : null;
     return await this.vistasService.getFacturacionByEmpresa(idEmpresaNum);
   }
 
@@ -62,13 +62,13 @@ export class VistasController {
     @Param('numeroDocumento') numeroDocumento: string,
     @Query('idEmpresa') idEmpresa?: string
   ) {
-    const idEmpresaNum = idEmpresa ? parseInt(idEmpresa, 10) : null;
+    const idEmpresaNum = idEmpresa ? Number.parseInt(idEmpresa, 10) : null;
     return await this.vistasService.getFacturacionByDocumento(numeroDocumento, idEmpresaNum);
   }
 
   @Get('ingresos')
   async getIngresosMensuales(@Query('idEmpresa') idEmpresa?: string) {
-    const idEmpresaNum = idEmpresa ? parseInt(idEmpresa, 10) : null;
+    const idEmpresaNum = idEmpresa ? Number.parseInt(idEmpresa, 10) : null;
     return await this.vistasService.getIngresosByEmpresa(idEmpresaNum);
   }
 

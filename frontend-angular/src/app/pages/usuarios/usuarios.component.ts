@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { UsuarioModalComponent, UsuarioDialogData } from '../../components/usuario-modal/usuario-modal.component';
 import { RolUsuario } from '../../models/shared.model';
 
@@ -42,20 +42,22 @@ export class UsuariosComponent implements OnInit {
   
 
   constructor(
-    private usuariosService: UsuariosService,
-    private authService: AuthService,
-    private dialog: MatDialog,
+  private readonly usuariosService: UsuariosService,
+  private readonly authService: AuthService,
+  private readonly dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
 
     this.usuarioActual = this.authService.getUsuarioActual();
-    if (this.usuarioActual && this.usuarioActual.idEmpresa) {
 
-      this.cargarUsuariosPorEmpresa(this.usuarioActual.idEmpresa);
+    if (this.usuarioActual?.idEmpresa) {
+        
+        this.cargarUsuariosPorEmpresa(this.usuarioActual.idEmpresa);
+
     } else {
-
-      this.errorMessage = 'no hay usuario autenticado';
+        this.errorMessage = 'no hay usuario autenticado o empresa asignada';
+        
     }
   }
 
@@ -77,7 +79,7 @@ export class UsuariosComponent implements OnInit {
 
   abrirModalCrear(): void {
     const usuarioActual = this.authService.getUsuarioActual();
-    if (!usuarioActual || !usuarioActual.idEmpresa) return;
+    if (!usuarioActual?.idEmpresa) return;
 
     const data: UsuarioDialogData = {
       idEmpresa: usuarioActual.idEmpresa
@@ -101,7 +103,7 @@ export class UsuariosComponent implements OnInit {
       next: () => {
         this.mensajeExito = 'Usuario creado exitosamente';
         const usuario = this.authService.getUsuarioActual();
-        if (usuario && usuario.idEmpresa) {
+        if (usuario?.idEmpresa) {
           this.cargarUsuariosPorEmpresa(usuario.idEmpresa);
         }
         setTimeout(() => {
@@ -125,25 +127,25 @@ export class UsuariosComponent implements OnInit {
   }
 
   eliminarUsuario(id: number): void {
-    this.usuariosService.delete(id).subscribe({
-      next: () => {
-        this.mensajeExito = 'Usuario operador eliminado exitosamente';
-        this.usuarioActual?.idEmpresa ? this.cargarUsuariosPorEmpresa(this.usuarioActual.idEmpresa) : null;
-        
-        setTimeout(() => {
-          this.mensajeExito = '';
-        }, 3000);
-      },
-      error: (error) => {
-        if (error.status === 403) {
-          this.errorMessage = 'Solo se pueden eliminar usuarios con rol OPERADOR';
-        } else {
-          this.errorMessage = 'Error al eliminar usuario';
-        }
-        setTimeout(() => {
-          this.errorMessage = '';
-        }, 3000);
+  this.usuariosService.delete(id).subscribe({
+    next: () => {
+      this.mensajeExito = 'Usuario operador eliminado exitosamente';
+
+      if (this.usuarioActual?.idEmpresa) {
+        this.cargarUsuariosPorEmpresa(this.usuarioActual.idEmpresa);
       }
-    });
+
+      setTimeout(() => {
+        this.mensajeExito = '';
+      }, 3000);
+    },
+    error: (error) => {
+      if (error.status === 403) {
+        this.errorMessage = 'Solo se pueden eliminar usuarios con rol OPERADOR';
+      } else {
+        this.errorMessage = 'Error al eliminar el usuario';
+      }
+    }
+  });
   }
 }

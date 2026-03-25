@@ -2,10 +2,6 @@ import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs
 import { ReportesService } from './reportes.service';
 import { CreateReporteDto } from './entities/dto/crear-reporte.dto';
 import { Reporte } from './entities/reporte.entity';
-// import { Roles } from 'src/shared/decorators'; // REMOVED FOR BackendSinAuth
-// import { RoleEnum } from 'src/shared/entities/rol.entity'; // REMOVED FOR BackendSinAuth
-// import { JwtAuthGuard } from 'src/auth/guards'; // REMOVED FOR BackendSinAuth
-// import { RolesGuard } from 'src/shared/guards'; // REMOVED FOR BackendSinAuth
 
 @Controller('reports')
 export class ReportesController {

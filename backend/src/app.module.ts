@@ -32,7 +32,7 @@ import { VistasModule } from './vistas/vistas.module';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         sid: configService.get<string>('DB_SID'),
-        synchronize: false,
+        synchronize: true,
         autoLoadEntities: true,
         logging: true,
         extra: {

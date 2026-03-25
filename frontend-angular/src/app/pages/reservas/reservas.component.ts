@@ -13,12 +13,12 @@ import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FiltroParqueaderosComponent } from '../../components/filtro-parqueaderos/filtro-parqueaderos.component';
 import { ReservaModalComponent, ReservaDialogData } from '../../components/reserva-modal/reserva-modal.component';
 import { PagoModalComponent, PagoDialogData } from '../../components/pago-modal/pago-modal.component';
 import { PagosService } from '../../services/pagos.service';
-import { Router } from '@angular/router';
+
 
 
 @Component({
@@ -50,11 +50,11 @@ export class ReservasComponent implements OnInit {
 
 
   constructor(
-    private reservasService: ReservasService,
-    private parqueaderosService: ParqueaderosService,
-    private authService: AuthService,
-    private pagosService: PagosService,
-    private dialog: MatDialog,
+    readonly reservasService: ReservasService,
+    readonly parqueaderosService: ParqueaderosService,
+    readonly authService: AuthService,
+    readonly pagosService: PagosService,
+    readonly dialog: MatDialog,
 
   ) {}
 
@@ -64,7 +64,7 @@ export class ReservasComponent implements OnInit {
 
   private cargarParqueaderos(): void {
     const usuario = this.authService.getUsuarioActual();
-    if (!usuario || !usuario.idEmpresa) {
+    if (!usuario?.idEmpresa) {
 
       console.error('No hay usuario autenticado');
       return;

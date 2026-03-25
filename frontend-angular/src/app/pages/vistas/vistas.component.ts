@@ -44,11 +44,11 @@ export class VistasComponent implements OnInit {
   promedioOcupacion = 0;
 
   private peticionesCompletadas = 0;
-  private totalPeticiones = 4;
+  readonly totalPeticiones = 4;
 
   constructor(
-    private authService: AuthService,
-    private vistasService: VistasService
+    readonly authService: AuthService,
+    readonly vistasService: VistasService
   ) {}
 
   ngOnInit(): void {
@@ -57,7 +57,7 @@ export class VistasComponent implements OnInit {
 
   private cargarDatos(): void {
     const usuario = this.authService.getUsuarioActual();
-    if (!usuario || !usuario.idEmpresa) {
+    if (!usuario?.idEmpresa) {
       console.error('No hay usuario autenticado');
       this.loading = false;
       return;

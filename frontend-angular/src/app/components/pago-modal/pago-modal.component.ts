@@ -46,10 +46,10 @@ export class PagoModalComponent implements OnInit {
   loading = false;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private dialogRef: MatDialogRef<PagoModalComponent>,
+    readonly formBuilder: FormBuilder,
+    readonly dialogRef: MatDialogRef<PagoModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: PagoDialogData,
-    private reservasService: ReservasService
+    readonly reservasService: ReservasService
   ) {}
 
   ngOnInit(): void {

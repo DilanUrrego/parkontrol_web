@@ -48,10 +48,10 @@ export class ReservaModalComponent implements OnInit {
   loadingCeldas = false;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private dialogRef: MatDialogRef<ReservaModalComponent>,
-    private vehiculosService: VehiculosService,
-    private celdasService: CeldasService,
+    readonly formBuilder: FormBuilder,
+    readonly dialogRef: MatDialogRef<ReservaModalComponent>,
+    readonly vehiculosService: VehiculosService,
+    readonly celdasService: CeldasService,
     @Inject(MAT_DIALOG_DATA) public data: ReservaDialogData
   ) {
     this.reservaForm = this.formBuilder.group({

@@ -1,13 +1,9 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, NotFoundException, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, NotFoundException } from '@nestjs/common';
 import { FacturacionService } from './facturacion.service';
 import { CreateFacturaElectronicaDto } from './entities/dto/crear-factura-electronica.dto';
 import { CreateClienteFacturaDto } from './entities/dto/crear-cliente-factura.dto';
 import { FacturaElectronica } from './entities/factura-electronica.entity';
 import { ClienteFactura } from './entities/cliente-factura.entity';
-// import { Roles } from 'src/shared/decorators'; // REMOVED FOR BackendSinAuth
-// import { RoleEnum } from 'src/shared/entities/rol.entity'; // REMOVED FOR BackendSinAuth
-// import { JwtAuthGuard } from 'src/auth/guards'; // REMOVED FOR BackendSinAuth
-// import { RolesGuard } from 'src/shared/guards'; // REMOVED FOR BackendSinAuth
 
 @Controller('invoicing')
 export class FacturacionController {

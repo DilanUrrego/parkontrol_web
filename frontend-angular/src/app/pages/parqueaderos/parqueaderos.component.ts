@@ -34,9 +34,9 @@ export class ParqueaderosComponent implements OnInit {
   usuarioIsAdmin: boolean = false;
 
   constructor(
-    private parqueaderosService: ParqueaderosService,
-    private authService: AuthService,
-    private dialog: MatDialog
+    readonly parqueaderosService: ParqueaderosService,
+    readonly authService: AuthService,
+    readonly dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +49,7 @@ export class ParqueaderosComponent implements OnInit {
 
   private obtenerEmpresaUsuario(): void {
     const usuario = this.authService.getUsuarioActual();
-    if (usuario && usuario.idEmpresa) {
+    if (usuario?.idEmpresa) {
       this.idEmpresa = usuario.idEmpresa;
     }
   }

@@ -5,7 +5,6 @@ import { AuthService } from '../../services/autenticacion.service';
 import { Tarifa } from '../../models/tarifa.model';
 import { Parqueadero } from '../../models/parqueadero.model';
 import { TarifaModalComponent, TarifaDialogData } from '../../components/tarifa-modal/tarifa-modal.component';
-import { CommonModule } from '@angular/common';
 import { FiltroParqueaderosComponent } from '../../components/filtro-parqueaderos/filtro-parqueaderos.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -47,10 +46,10 @@ export class TarifasComponent implements OnInit {
   displayedColumns: string[] = ['id', 'idParqueadero', 'idTipoVehiculo', 'precioFraccionHora', 'precioHoraAdicional', 'acciones'];
 
   constructor(
-    private tarifasService: TarifasService,
-    private parqueaderosService: ParqueaderosService,
-    private authService: AuthService,
-    private dialog: MatDialog
+    readonly tarifasService: TarifasService,
+    readonly parqueaderosService: ParqueaderosService,
+    readonly authService: AuthService,
+    readonly dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -59,7 +58,7 @@ export class TarifasComponent implements OnInit {
 
   private cargarParqueaderos(): void {
     const usuario = this.authService.getUsuarioActual();
-    if (!usuario || !usuario.idEmpresa) {
+    if (!usuario?.idEmpresa) {
       console.error('No hay usuario autenticado');
       return;
     }

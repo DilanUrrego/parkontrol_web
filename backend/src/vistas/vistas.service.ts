@@ -35,7 +35,7 @@ export class VistasService {
       const transformed: any = {};
       for (const key in row) {
         // Convert Oracle column names (UPPERCASE_WITH_UNDERSCORES) to camelCase
-        const camelKey = key.toLowerCase().replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+        const camelKey = key.toLowerCase().replaceAll(/_([a-z])/g, (_, letter) => letter.toUpperCase());
         transformed[camelKey] = row[key];
       }
       return transformed;

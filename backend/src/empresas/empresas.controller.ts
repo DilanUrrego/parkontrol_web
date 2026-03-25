@@ -1,6 +1,5 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Controller, Get, Param, } from '@nestjs/common';
 import { EmpresasService } from './empresas.service';
-import { CreateEmpresaDto } from './entities/dto/crear-empresa.dto';
 import { EmpresaResponseDto } from './entities/dto/empresa-response.dto';
 
 @Controller('companies')
